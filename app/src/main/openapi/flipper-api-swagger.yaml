@@ -1,0 +1,66 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: 'Flickr Image API'
+host: 'api.flickr.com'
+basePath: '/services/feeds'
+schemes:
+  - https
+paths:
+  /photos_public.gne:
+    get:
+      tags:
+        - 'Flicker'
+      operationId: 'getImages'
+      summary: 'Get images from Flickr based on tags'
+      description: 'This endpoint retrieves images from Flickr based on the provided tags.'
+      parameters:
+        - name: 'format'
+          in: 'query'
+          description: 'The format of the response.'
+          required: true
+          type: 'string'
+          default: 'json'
+        - name: 'nojsoncallback'
+          in: 'query'
+          description: 'Specify that the JSON response should not be wrapped in a function call.'
+          required: true
+          type: 'string'
+          default: '1'
+        - name: 'tags'
+          in: 'query'
+          description: 'Comma-separated list of tags to filter images by.'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: 'Successful operation'
+          schema:
+            type: 'array'
+            items:
+              $ref: '#/definitions/Image'
+definitions:
+  Image:
+    type: 'object'
+    properties:
+      title:
+        type: 'string'
+      link:
+        type: 'string'
+      media:
+        type: 'object'
+        properties:
+          m:
+            type: 'string'
+      date_taken:
+        type: 'string'
+      description:
+        type: 'string'
+      published:
+        type: 'string'
+      author:
+        type: 'string'
+      author_id:
+        type: 'string'
+      tags:
+        type: 'string'

@@ -1,7 +1,10 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("org.openapi.generator")
 }
+
+val openapiOutputDir = buildDir.resolve("generated/openapi")
 
 android {
     namespace = "cz.musilto5.myflickerapp"
@@ -47,9 +50,19 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("$openapiOutputDir/src/commonMain/kotlin")
+        }
+    }
 }
 
+
 dependencies {
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -59,6 +72,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.kotlinx.serialization)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,4 +80,29 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+val packageName = "cz.musilto5.myflickerapp.data"
+
+val apiPackageName = "$packageName.api"
+val generateMyPplApiV1 by tasks.registering(org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class) {
+    generatorName.set("kotlin")
+    library.set("multiplatform")
+    inputSpec.set("$projectDir/src/main/openapi/flipper-api-swagger.yaml")
+    outputDir.set(openapiOutputDir.path)
+    apiPackage.set("$apiPackageName.service")
+    modelPackage.set("$apiPackageName.model")
+
+    generateApiTests.set(false)
+    generateApiDocumentation.set(false)
+    generateModelTests.set(false)
+    generateModelDocumentation.set(false)
+    // Add additional properties
+    additionalProperties.set(mapOf("dateLibrary" to "kotlinx-datetime"))
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>> {
+    dependsOn(
+        generateMyPplApiV1,
+    )
 }
