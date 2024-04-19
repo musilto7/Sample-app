@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("org.openapi.generator")
+    id("kotlin-parcelize")
+    kotlin("plugin.serialization") version libs.versions.kotlin
 }
 
 val openapiOutputDir = buildDir.resolve("generated/openapi")
@@ -61,6 +63,7 @@ android {
 dependencies {
 
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
     implementation(libs.ktor.client.logging)
 
     implementation(libs.ktor.client.core)
