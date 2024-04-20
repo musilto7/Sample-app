@@ -1,10 +1,10 @@
-package cz.musilto5.myflickerapp.presentation.feature.list
+package cz.musilto5.myflickerapp.presentation.feature.list.model
 
 data class ImagesViewState(
     val tagsInput: String,
-    val images: List<String>,
+    val images: List<FlickerImageVO>,
     val isLoading: Boolean,
-    val errorMessage : String?,
+    val errorMessage: String?,
 ) {
     companion object {
         val IDLE = ImagesViewState(

@@ -36,12 +36,32 @@ paths:
         '200':
           description: 'Successful operation'
           schema:
-            type: 'array'
-            items:
-              $ref: '#/definitions/Image'
+            $ref: '#/definitions/ImageResponse'
 definitions:
+  ImageResponse:
+    type: 'object'
+    required:
+      - items
+    properties:
+      title:
+        type: 'string'
+      link:
+        type: 'string'
+      description:
+        type: 'string'
+      modified:
+        type: 'string'
+      generator:
+        type: 'string'
+      items:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Image'
   Image:
     type: 'object'
+    required:
+      - title
+      - media
     properties:
       title:
         type: 'string'
@@ -49,6 +69,8 @@ definitions:
         type: 'string'
       media:
         type: 'object'
+        required:
+          - m
         properties:
           m:
             type: 'string'
