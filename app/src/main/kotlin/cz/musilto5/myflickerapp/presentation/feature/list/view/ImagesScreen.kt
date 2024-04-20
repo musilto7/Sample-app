@@ -1,19 +1,28 @@
 package cz.musilto5.myflickerapp.presentation.feature.list.view
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import cz.musilto5.myflickerapp.R
 import cz.musilto5.myflickerapp.presentation.feature.list.ImagesViewModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -33,20 +42,39 @@ fun ImagesScreen(viewModel: ImagesViewModel = koinViewModel()) {
             onValueChange = textInputComponent::updateText
         )
 
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
-            modifier = Modifier.padding(horizontal = 12.dp)
-        ) {
-            items(viewState.images,
-                key = { it.imageUrl },
-                contentType = { "1" }) { item ->
-                AsyncImage(
-                    model = item.imageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(4.dp),
-                    contentScale = ContentScale.FillWidth,
-                )
+        Box(modifier = Modifier.fillMaxSize()) {
+
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
+                modifier = Modifier.padding(horizontal = 12.dp)
+            ) {
+                items(viewState.images,
+                    key = { it.imageUrl },
+                    contentType = { "1" }) { item ->
+                    AsyncImage(
+                        model = item.imageUrl,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(4.dp),
+                        contentScale = ContentScale.FillWidth,
+                    )
+                }
+            }
+
+            if (viewState.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            }
+
+            viewState.errorMessage?.let { errorMessage ->
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(text = errorMessage)
+                    Button(onClick = { viewModel.reloadImages() }) {
+                        Text(stringResource(id = R.string.reload))
+                    }
+                }
             }
         }
     }

@@ -12,6 +12,7 @@ import cz.musilto5.myflickerapp.presentation.feature.list.model.FlickerImageVO
 import cz.musilto5.myflickerapp.presentation.feature.list.model.ImagesViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -21,16 +22,21 @@ class ImagesViewModel(
     private val repository: ImagesRepository,
 ) : ViewModel() {
 
-
     private val _viewState: MutableStateFlow<ImagesViewState> =
         MutableStateFlow(ImagesViewState.IDLE)
     val viewStates: StateFlow<ImagesViewState> = _viewState
 
+    private val reloadFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+
     init {
         viewModelScope.launch {
-            textInputComponent.viewState.debounce(300L).collect { textInputModel ->
-                fetchImages(textInputModel.text)
-            }
+            reloadFlow.combine(
+                textInputComponent.viewState
+                    .debounce(300L)
+            ) { _, viewState -> viewState }
+                .collect { textInputModel ->
+                    fetchImages(textInputModel.text)
+                }
         }
     }
 
@@ -73,6 +79,11 @@ class ImagesViewModel(
         return "Something went wrong"
     }
 
+    fun reloadImages() {
+        reloadFlow.update {
+            it + 1
+        }
+    }
 
     companion object {
         val WHITE_SPACE_REGEX = "\\s+".toRegex()
