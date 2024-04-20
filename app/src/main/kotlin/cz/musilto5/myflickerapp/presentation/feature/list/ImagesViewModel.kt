@@ -22,11 +22,11 @@ class ImagesViewModel(
     private val repository: ImagesRepository,
 ) : ViewModel() {
 
+    private val reloadFlow: MutableStateFlow<Int> = MutableStateFlow(0)
+
     private val _viewState: MutableStateFlow<ImagesViewState> =
         MutableStateFlow(ImagesViewState.IDLE)
     val viewStates: StateFlow<ImagesViewState> = _viewState
-
-    private val reloadFlow: MutableStateFlow<Int> = MutableStateFlow(0)
 
     init {
         viewModelScope.launch {
@@ -41,6 +41,13 @@ class ImagesViewModel(
     }
 
     private suspend fun fetchImages(tagsInput: String) {
+        showLoading(tagsInput)
+        repository.downloadImages(toTagList(tagsInput))
+            .onSuccess(::onFetchSuccess)
+            .onError(::onFetchError)
+    }
+
+    private fun showLoading(tagsInput: String) {
         _viewState.update {
             it.copy(
                 isLoading = true,
@@ -48,23 +55,18 @@ class ImagesViewModel(
                 tagsInput = tagsInput,
             )
         }
-        repository.downloadImages(tagsInput.split(WHITE_SPACE_REGEX).filter { it.isNotBlank() })
-            .onSuccess { images ->
-                _viewState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = null,
-                        images = images.map { toViewObject(it) })
-                }
-            }.onError { errorType, throwable ->
-                _viewState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = toErrorMessage(errorType, throwable),
-                        images = emptyList(),
-                    )
-                }
-            }
+    }
+
+    private fun toTagList(tagsInput: String) =
+        tagsInput.split(WHITE_SPACE_REGEX).filter { it.isNotBlank() }
+
+    private fun onFetchSuccess(images: List<FlickerImage>) {
+        _viewState.update {
+            it.copy(
+                isLoading = false,
+                errorMessage = null,
+                images = images.map { image -> toViewObject(image) })
+        }
     }
 
     private fun toViewObject(flickerImage: FlickerImage): FlickerImageVO {
@@ -74,15 +76,25 @@ class ImagesViewModel(
         )
     }
 
+    private fun onFetchError(
+        errorType: ErrorType,
+        throwable: Throwable?
+    ) {
+        _viewState.update {
+            it.copy(
+                isLoading = false,
+                errorMessage = toErrorMessage(errorType, throwable),
+                images = emptyList(),
+            )
+        }
+    }
 
-    private fun toErrorMessage(errorType: ErrorType, throwable: Throwable?): String? {
+    private fun toErrorMessage(errorType: ErrorType, throwable: Throwable?): String {
         return "Something went wrong"
     }
 
     fun reloadImages() {
-        reloadFlow.update {
-            it + 1
-        }
+        reloadFlow.update { it + 1 }
     }
 
     companion object {

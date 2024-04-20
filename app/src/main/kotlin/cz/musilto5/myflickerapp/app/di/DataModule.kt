@@ -13,7 +13,9 @@ val dataModule = module {
             preconfigured = get()
         }
     }
+
     single { OkHttpClient.Builder().build() }
+
     single {
         ImagesRepository(
             flickerApi = get()
