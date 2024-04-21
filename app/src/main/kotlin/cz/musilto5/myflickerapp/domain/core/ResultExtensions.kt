@@ -58,18 +58,3 @@ inline fun <DATA1, DATA2> Result<DATA1>.map(
         }
     }
 }
-
-
-inline fun <DATA> Result<DATA>.mapError(
-    transform: (ErrorType) -> ErrorType
-): Result<DATA> {
-    return when (this) {
-        is Result.Success -> {
-            Result.Success(this.data)
-        }
-
-        is Result.Error -> {
-            Result.Error(transform(this.errorType), this.exception)
-        }
-    }
-}

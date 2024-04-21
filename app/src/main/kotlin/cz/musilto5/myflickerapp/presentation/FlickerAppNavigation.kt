@@ -3,7 +3,10 @@ package cz.musilto5.myflickerapp.presentation
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,32 +24,17 @@ fun FlickerAppNavigation() {
         navController = navController,
         startDestination = NAVIGATION_IMAGES_LIST
     ) {
-        composable(route = NAVIGATION_IMAGES_LIST) {
-            ImagesScreen(navigateToImageDetail = {
-                navigateToImageDetail(navController, it)
-            })
-        }
-        composable(
-            route = NAVIGATION_IMAGE_DETAIL,
-            arguments = listOf(
-                navArgument(NAVIGATION_PARAM_IMAGE_DETAIL) {
-                    type = NavType.StringType
-                }
-            ),
-            enterTransition = {
-                slideInVertically(initialOffsetY = { it })
-            },
-            exitTransition = {
-                slideOutVertically(targetOffsetY = { it })
-            }
-        ) { navBackStackEntry ->
-            val serializedImageVo =
-                navBackStackEntry.arguments!!.getString(NAVIGATION_PARAM_IMAGE_DETAIL)!!
-            ImageDetailScreen(NavUtils.fromJsonString(serializedImageVo),
-                onBackPressed = {
-                    navController.popBackStack()
-                })
-        }
+        imageListComposable(navController)
+        imageDetailComposable(navController)
+    }
+}
+
+
+private fun NavGraphBuilder.imageListComposable(navController: NavHostController) {
+    composable(route = NAVIGATION_IMAGES_LIST) {
+        ImagesScreen(navigateToImageDetail = {
+            navigateToImageDetail(navController, it)
+        })
     }
 }
 
@@ -57,6 +45,38 @@ private fun navigateToImageDetail(navController: NavController, imageVO: Flicker
             NavUtils.toJsonString(imageVO)
         )
     )
+}
+
+private fun NavGraphBuilder.imageDetailComposable(navController: NavHostController) {
+    composable(
+        route = NAVIGATION_IMAGE_DETAIL,
+        arguments = listOf(
+            navArgument(NAVIGATION_PARAM_IMAGE_DETAIL) {
+                type = NavType.StringType
+            }
+        ),
+        enterTransition = {
+            slideInVertically(initialOffsetY = { it })
+        },
+        exitTransition = {
+            slideOutVertically(targetOffsetY = { it })
+        }
+    ) { navBackStackEntry ->
+        ImageDetailScreen(navBackStackEntry, navController)
+    }
+}
+
+@Composable
+private fun ImageDetailScreen(
+    navBackStackEntry: NavBackStackEntry,
+    navController: NavHostController
+) {
+    val serializedImageVo =
+        navBackStackEntry.arguments!!.getString(NAVIGATION_PARAM_IMAGE_DETAIL)!!
+    ImageDetailScreen(NavUtils.fromJsonString(serializedImageVo),
+        onBackPressed = {
+            navController.popBackStack()
+        })
 }
 
 const val NAVIGATION_IMAGES_LIST = "flickerImages"

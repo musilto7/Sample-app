@@ -66,21 +66,6 @@ class ResultExtensionsKtTest {
     }
 
     @Test
-    fun `when mapError is called on Success, then return Success`() {
-        val result: Result<String> = Result.Success("data")
-        val mappedResult = result.mapError { ErrorType.Network }
-        assert(mappedResult is Result.Success) { "Expected that mapError should return Success" }
-    }
-
-    @Test
-    fun `when mapError is called on Error, then return Error with mapped error`() {
-        val result: Result<String> = Result.Error(ErrorType.Unknown)
-        val mappedResult = result.mapError { ErrorType.Network }
-        assert(mappedResult is Result.Error) { "Expected that mapError should return Error" }
-        assert((mappedResult as Result.Error).errorType == ErrorType.Network) { "Expected that mapError should return Error with mapped error" }
-    }
-
-    @Test
     fun `when chain is called on Success, then return transformed Result`() {
         val result: Result<String> = Result.Success("data")
         val transformedResult = result.chain { Result.Success(it.length) }
