@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import cz.musilto5.myflickerapp.presentation.feature.list.view.ImagesScreen
 import cz.musilto5.myflickerapp.presentation.theme.MyFlickerApplicationTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +19,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    ImagesScreen()
+                    FlickerAppNavigation()
                 }
             }
         }

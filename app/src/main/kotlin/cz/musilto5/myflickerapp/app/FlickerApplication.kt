@@ -6,14 +6,14 @@ import cz.musilto5.myflickerapp.app.di.presentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
-class MyFlickerApplication : Application() {
+class FlickerApplication : Application() {
     // start koin
     override fun onCreate() {
         super.onCreate()
         // start Koin!
         startKoin {
             // declare used Android context
-            androidContext(this@MyFlickerApplication)
+            androidContext(this@FlickerApplication)
             // declare modules
             modules(
                 listOf(

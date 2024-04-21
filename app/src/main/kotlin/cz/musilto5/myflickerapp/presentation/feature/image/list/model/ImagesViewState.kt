@@ -1,4 +1,6 @@
-package cz.musilto5.myflickerapp.presentation.feature.list.model
+package cz.musilto5.myflickerapp.presentation.feature.image.list.model
+
+import cz.musilto5.myflickerapp.presentation.feature.image.model.FlickerImageVO
 
 data class ImagesViewState(
     val tagsInput: String,

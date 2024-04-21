@@ -1,4 +1,4 @@
-package cz.musilto5.myflickerapp.presentation.feature.list
+package cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,9 +7,9 @@ import cz.musilto5.myflickerapp.domain.core.ErrorType
 import cz.musilto5.myflickerapp.domain.core.onError
 import cz.musilto5.myflickerapp.domain.core.onSuccess
 import cz.musilto5.myflickerapp.domain.feature.images.model.FlickerImage
-import cz.musilto5.myflickerapp.presentation.core.TextInputComponent
-import cz.musilto5.myflickerapp.presentation.feature.list.model.FlickerImageVO
-import cz.musilto5.myflickerapp.presentation.feature.list.model.ImagesViewState
+import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
+import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesViewState
+import cz.musilto5.myflickerapp.presentation.feature.image.model.FlickerImageVO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine

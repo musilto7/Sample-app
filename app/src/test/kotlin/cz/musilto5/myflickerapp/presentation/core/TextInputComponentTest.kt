@@ -1,6 +1,8 @@
 package cz.musilto5.myflickerapp.presentation.core
 
 import androidx.lifecycle.SavedStateHandle
+import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
+import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponentModel
 import org.junit.Assert
 import org.junit.Test
 

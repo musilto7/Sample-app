@@ -1,4 +1,4 @@
-package cz.musilto5.myflickerapp.presentation.core
+package cz.musilto5.myflickerapp.presentation.core.component
 
 import androidx.lifecycle.SavedStateHandle
 import kotlinx.coroutines.flow.StateFlow
