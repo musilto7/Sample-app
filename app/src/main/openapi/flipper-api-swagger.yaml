@@ -32,6 +32,10 @@ paths:
           description: 'Comma-separated list of tags to filter images by.'
           required: true
           type: 'string'
+        - name: 'tagmode'
+          in: 'query'
+          description: 'Control whether items must have ALL the tags (tagmode=all), or ANY (tagmode=any) of the tags. Default is ALL.'
+          type: 'string'
       responses:
         '200':
           description: 'Successful operation'
@@ -62,6 +66,7 @@ definitions:
     required:
       - title
       - media
+      - date_taken
     properties:
       title:
         type: 'string'
@@ -76,6 +81,7 @@ definitions:
             type: 'string'
       date_taken:
         type: 'string'
+        format: 'date-time'
       description:
         type: 'string'
       published:

@@ -4,14 +4,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -26,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import cz.musilto5.myflickerapp.R
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
-import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponentModel
 import cz.musilto5.myflickerapp.presentation.core.component.tooling.TextInputComponentStub
 import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesViewState
 import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesViewModel
@@ -40,10 +40,13 @@ fun ImagesScreen(
 ) {
 
     val viewState by viewModel.viewStates.collectAsState()
+    val isSwitchChecked by viewModel.switchState.collectAsState()
 
     ImageScreen(
         viewState,
         viewModel.textInputComponent,
+        isSwitchChecked,
+        viewModel::onSwitchCheckedChange,
         viewModel::reloadImages,
         navigateToImageDetail,
     )
@@ -53,16 +56,29 @@ fun ImagesScreen(
 private fun ImageScreen(
     viewState: ImagesViewState,
     textInputComponent: TextInputComponent,
+    isSwitchChecked: Boolean,
+    onSwitchCheckedChange: (Boolean) -> Unit,
     reloadImages: () -> Unit,
     navigateToImageDetail: (FlickerImageVO) -> Unit
 ) {
     Column {
-        TextFiled(
-            textInputComponent,
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            TextFiled(
+                textInputComponent,
+                Modifier
+                    .padding(16.dp)
+                    .weight(1f),
+            )
+
+            Switch(
+                checked = isSwitchChecked,
+                onCheckedChange = onSwitchCheckedChange,
+                modifier = Modifier.padding(end = 16.dp)
+            )
+
+        }
 
         Box(modifier = Modifier.fillMaxSize()) {
             Images(viewState, navigateToImageDetail)
@@ -161,9 +177,11 @@ fun ImagesScreenPreview() {
             ),
             isLoading = false,
             errorMessage = null,
-            tagsInput = "dog"
+            tagsInput = "dog",
         ),
         textInputComponent = TextInputComponentStub("dog"),
+        isSwitchChecked = false,
+        onSwitchCheckedChange = {},
         reloadImages = {},
         navigateToImageDetail = {}
     )

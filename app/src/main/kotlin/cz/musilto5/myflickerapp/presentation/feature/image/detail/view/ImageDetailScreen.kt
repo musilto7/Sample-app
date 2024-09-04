@@ -64,7 +64,7 @@ private fun ImageDetailTopAppBar(
 private fun CloseNavigationIcon(onBackPressed: () -> Unit) {
     IconButton(onClick = onBackPressed) {
         Icon(
-            Icons.Default.Close,
+            imageVector = Icons.Default.Close,
             contentDescription = stringResource(id = R.string.close_button_content_description)
         )
     }
