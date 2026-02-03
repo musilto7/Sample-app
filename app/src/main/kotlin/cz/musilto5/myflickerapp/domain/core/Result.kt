@@ -1,25 +1,13 @@
 package cz.musilto5.myflickerapp.domain.core
 
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
+typealias ErrorType = Error
 
-sealed class Result<DATA> {
+sealed class Result<out DATA, out ERROR : ErrorType> {
 
-    @OptIn(ExperimentalContracts::class)
-    fun isSuccess(): Boolean {
-        contract { returns(true) implies (this@Result is Success<DATA>) }
-        return this is Success
-    }
+    data class Success<out DATA, out ERROR : ErrorType>(val data: DATA) : Result<DATA, ERROR>()
 
-    @OptIn(ExperimentalContracts::class)
-    fun isError(): Boolean {
-        contract { returns(true) implies (this@Result is Error<DATA>) }
-        return this is Success
-    }
-
-    data class Success<DATA>(val data: DATA) : Result<DATA>()
-    data class Error<DATA>(
-        val errorType: ErrorType,
+    data class Error<out DATA, out ERROR : ErrorType>(
+        val error: ERROR,
         val exception: Throwable? = null,
-    ) : Result<DATA>()
+    ) : Result<DATA, ERROR>()
 }

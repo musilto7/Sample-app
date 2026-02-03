@@ -8,7 +8,7 @@ class ResultExtensionsKtTest {
     fun `when onSuccess is called on Success, then action is executed`() {
         var data: String? = null
         val expectedData = "data"
-        val result: Result<String> = Result.Success(expectedData)
+        val result: Result<String, Error> = Result.Success(expectedData)
         result.onSuccess { data = it }
         assert(data == expectedData) { "Expected that onSuccess action should be executed" }
     }
@@ -16,32 +16,32 @@ class ResultExtensionsKtTest {
     @Test
     fun `when onSuccess is called on Error, then action is not executed`() {
         var data: String? = null
-        val result: Result<String> = Result.Error(ErrorType.Unknown)
+        val result: Result<String, Error> = Result.Error(Error.Unknown)
         result.onSuccess { data = it }
         assert(data == null) { "Expected that onSuccess action should not be executed" }
     }
 
     @Test
     fun `when onError is called on Error, then action is executed`() {
-        var errorType: ErrorType? = null
+        var errorType: Error? = null
         var exception: Throwable? = null
 
         val expectedException = IllegalStateException("error")
-        val result: Result<String> = Result.Error(ErrorType.Unknown, expectedException)
+        val result: Result<String, Error> = Result.Error(Error.Unknown, expectedException)
         result.onError { error, t ->
             errorType = error
             exception = t
         }
-        assert(errorType == ErrorType.Unknown) { "Expected that onError action should be executed" }
+        assert(errorType == Error.Unknown) { "Expected that onError action should be executed" }
         assert(exception == expectedException) { "Expected that onError action should be executed" }
     }
 
     @Test
     fun `when onError is called on Success, then action is not executed`() {
-        var errorType: ErrorType? = null
+        var errorType: Error? = null
         var exception: Throwable? = null
 
-        val result: Result<String> = Result.Success("data")
+        val result: Result<String, Error> = Result.Success("data")
         result.onError { error, t ->
             errorType = error
             exception = t
@@ -52,7 +52,7 @@ class ResultExtensionsKtTest {
 
     @Test
     fun `when map is called on Success, then return Success with mapped data`() {
-        val result: Result<String> = Result.Success("data")
+        val result: Result<String, Error> = Result.Success("data")
         val mappedResult = result.map { it.length }
         assert(mappedResult is Result.Success) { "Expected that map should return Success" }
         assert((mappedResult as Result.Success).data == 4) { "Expected that map should return Success with mapped data" }
@@ -60,14 +60,14 @@ class ResultExtensionsKtTest {
 
     @Test
     fun `when map is called on Error, then return Error`() {
-        val result: Result<String> = Result.Error(ErrorType.Unknown)
+        val result: Result<String, Error> = Result.Error(Error.Unknown)
         val mappedResult = result.map { it.length }
         assert(mappedResult is Result.Error) { "Expected that map should return Error" }
     }
 
     @Test
     fun `when chain is called on Success, then return transformed Result`() {
-        val result: Result<String> = Result.Success("data")
+        val result: Result<String, Error> = Result.Success("data")
         val transformedResult = result.chain { Result.Success(it.length) }
         assert(transformedResult is Result.Success) { "Expected that chain should return Success" }
         assert((transformedResult as Result.Success).data == 4) { "Expected that chain should return Success with transformed data" }
@@ -75,7 +75,7 @@ class ResultExtensionsKtTest {
 
     @Test
     fun `when chain is called on Error, then return Error`() {
-        val result: Result<String> = Result.Error(ErrorType.Unknown)
+        val result: Result<String, Error> = Result.Error(Error.Unknown)
         val transformedResult = result.chain { Result.Success(it.length) }
         assert(transformedResult is Result.Error) { "Expected that chain should return Error" }
     }

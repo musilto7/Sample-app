@@ -3,7 +3,7 @@ package cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cz.musilto5.myflickerapp.data.feature.images.repository.ImagesRepository
-import cz.musilto5.myflickerapp.domain.core.ErrorType
+import cz.musilto5.myflickerapp.domain.core.Error
 import cz.musilto5.myflickerapp.domain.core.onError
 import cz.musilto5.myflickerapp.domain.core.onSuccess
 import cz.musilto5.myflickerapp.domain.feature.images.model.FlickerImage
@@ -77,7 +77,7 @@ class ImagesViewModel(
     }
 
     private fun onFetchError(
-        errorType: ErrorType,
+        errorType: Error,
         throwable: Throwable?
     ) {
         _viewState.update {
@@ -89,7 +89,7 @@ class ImagesViewModel(
         }
     }
 
-    private fun toErrorMessage(errorType: ErrorType, throwable: Throwable?): String {
+    private fun toErrorMessage(errorType: Error, throwable: Throwable?): String {
         return "Something went wrong"
     }
 

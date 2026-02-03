@@ -1,20 +1,20 @@
 package cz.musilto5.myflickerapp.domain.core
 
-import cz.musilto5.myflickerapp.domain.core.Result
 import org.junit.Test
-
 
 class ResultTest {
 
     @Test
-    fun `when isSuccess is called on Success, then return true`() {
-        val result: Result<String> = Result.Success("data")
-        assert(result.isSuccess()) { "Expected isSuccess to return true" }
+    fun `when Success is created, then it holds data and is Success type`() {
+        val result: Result<String, Error> = Result.Success("data")
+        assert(result is Result.Success) { "Expected result to be Success" }
+        assert((result as Result.Success).data == "data") { "Expected Success to hold correct data" }
     }
 
     @Test
-    fun `when isSuccess is called on Error, then return false`() {
-        val result: Result<String> = Result.Error(ErrorType.Unknown)
-        assert(!result.isSuccess()) { "Expected isSuccess to return false" }
+    fun `when Error is created, then it holds error and is Error type`() {
+        val result: Result<String, Error> = Result.Error(Error.Unknown)
+        assert(result is Result.Error) { "Expected result to be Error" }
+        assert((result as Result.Error).error == Error.Unknown) { "Expected Error to hold correct error" }
     }
 }

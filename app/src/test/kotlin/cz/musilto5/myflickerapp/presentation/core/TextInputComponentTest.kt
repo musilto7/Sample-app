@@ -46,5 +46,4 @@ class TextInputComponentTest {
     ) {
         tested = TextInputComponent(initialText, stateHandle, uniqueComponentName)
     }
-
 }

@@ -1,9 +1,8 @@
 package cz.musilto5.myflickerapp.domain.core
 
-
-inline fun <DATA> Result<DATA>.onSuccess(
+inline fun <DATA, ERROR : Error> Result<DATA, ERROR>.onSuccess(
     action: (DATA) -> Unit
-): Result<DATA> {
+): Result<DATA, ERROR> {
     when (this) {
         is Result.Success -> {
             action(this.data)
@@ -16,45 +15,45 @@ inline fun <DATA> Result<DATA>.onSuccess(
     return this
 }
 
-inline fun <DATA> Result<DATA>.onError(
-    action: (ErrorType, Throwable?) -> Unit
-): Result<DATA> {
+inline fun <DATA, ERROR : Error> Result<DATA, ERROR>.onError(
+    action: (Error, Throwable?) -> Unit
+): Result<DATA, ERROR> {
     when (this) {
         is Result.Success -> {
             // no-op
         }
 
         is Result.Error -> {
-            action(this.errorType, this.exception)
+            action(this.error, this.exception)
         }
     }
     return this
 }
 
-inline fun <DATA1, DATA2> Result<DATA1>.chain(
-    transform: (DATA1) -> Result<DATA2>
-): Result<DATA2> {
+inline fun <DATA1, DATA2, ERROR : Error> Result<DATA1, ERROR>.chain(
+    transform: (DATA1) -> Result<DATA2, ERROR>
+): Result<DATA2, ERROR> {
     return when (this) {
         is Result.Success -> {
             transform(this.data)
         }
 
         is Result.Error -> {
-            Result.Error(this.errorType, this.exception)
+            Result.Error(this.error, this.exception)
         }
     }
 }
 
-inline fun <DATA1, DATA2> Result<DATA1>.map(
+inline fun <DATA1, DATA2, ERROR : Error> Result<DATA1, ERROR>.map(
     transform: (DATA1) -> DATA2
-): Result<DATA2> {
+): Result<DATA2, ERROR> {
     return when (this) {
         is Result.Success -> {
             Result.Success(transform(this.data))
         }
 
         is Result.Error -> {
-            Result.Error(this.errorType, this.exception)
+            Result.Error(this.error, this.exception)
         }
     }
 }
