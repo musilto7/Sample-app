@@ -1,6 +1,7 @@
 [versions]
-agp = "8.13.2"
+agp = "9.0.0"
 coilCompose = "2.7.0"
+composeMultiplatform = "1.7.0"
 desugar_jdk_libs = "2.1.5"
 koin = "4.1.1"
 kotlin = "2.3.0"
@@ -16,6 +17,7 @@ composeBom = "2026.01.01"
 kotlinxSerialization = "1.10.0"
 kotlinxDateTime = "0.7.1"
 navigationCompose = "2.9.7"
+navigationComposeMultiplatform = "2.9.1"
 openapiGeneratorGradlePlugin = "7.14.0"
 
 [libraries]
@@ -48,8 +50,13 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 openapi-generator-gradle-plugin = { module = "org.openapitools:openapi-generator-gradle-plugin", version.ref = "openapiGeneratorGradlePlugin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-compose-multiplatform = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+navigation-compose-multiplatform = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeMultiplatform" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
