@@ -18,6 +18,7 @@ kotlinxSerialization = "1.10.0"
 kotlinxDateTime = "0.7.1"
 navigationCompose = "2.9.7"
 navigationComposeMultiplatform = "2.9.1"
+navigation3Ui = "1.0.0-alpha05"
 openapiGeneratorGradlePlugin = "7.14.0"
 
 [libraries]
@@ -53,6 +54,7 @@ openapi-generator-gradle-plugin = { module = "org.openapitools:openapi-generator
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose-multiplatform = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
 navigation-compose-multiplatform = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeMultiplatform" }
+navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigation3Ui" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

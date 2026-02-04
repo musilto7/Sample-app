@@ -1,87 +1,88 @@
 package cz.musilto5.myflickerapp.presentation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import cz.musilto5.myflickerapp.presentation.core.NavUtils
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
+import androidx.savedstate.serialization.SavedStateConfiguration
 import cz.musilto5.myflickerapp.presentation.feature.image.detail.view.ImageDetailScreen
 import cz.musilto5.myflickerapp.presentation.feature.image.list.view.ImagesScreen
 import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesScreenStateHolder
-import cz.musilto5.myflickerapp.presentation.feature.image.model.FlickerImageVO
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
+
+private const val TransitionDurationMillis = 300
 
 @Composable
 fun FlickerAppNavigation(
     imagesStateHolder: ImagesScreenStateHolder,
 ) {
-    val navController = rememberNavController()
-    NavHost(
-        navController = navController,
-        startDestination = NAVIGATION_IMAGES_LIST
-    ) {
-        imageListComposable(navController, imagesStateHolder)
-        imageDetailComposable(navController)
-    }
-}
-
-private fun NavGraphBuilder.imageListComposable(
-    navController: NavHostController,
-    stateHolder: ImagesScreenStateHolder
-) {
-    composable(route = NAVIGATION_IMAGES_LIST) {
-        ImagesScreen(
-            stateHolder = stateHolder,
-            navigateToImageDetail = { navigateToImageDetail(navController, it) }
-        )
-    }
-}
-
-private fun navigateToImageDetail(navController: NavController, imageVO: FlickerImageVO) {
-    navController.navigate(
-        NAVIGATION_IMAGE_DETAIL.replace(
-            "{$NAVIGATION_PARAM_IMAGE_DETAIL}",
-            NavUtils.toJsonString(imageVO)
-        )
-    )
-}
-
-private fun NavGraphBuilder.imageDetailComposable(navController: NavHostController) {
-    composable(
-        route = NAVIGATION_IMAGE_DETAIL,
-        arguments = listOf(
-            navArgument(NAVIGATION_PARAM_IMAGE_DETAIL) {
-                type = NavType.StringType
+    val configuration = SavedStateConfiguration {
+        serializersModule = SerializersModule {
+            polymorphic(NavKey::class) {
+                subclass(ImageListKey::class, ImageListKey.serializer())
+                subclass(ImageDetailKey::class, ImageDetailKey.serializer())
             }
-        ),
-        enterTransition = { slideInVertically(initialOffsetY = { it }) },
-        exitTransition = { slideOutVertically(targetOffsetY = { it }) }
-    ) { navBackStackEntry ->
-        ImageDetailScreenWrapper(navBackStackEntry, navController)
+        }
     }
-}
 
-@Composable
-private fun ImageDetailScreenWrapper(
-    navBackStackEntry: NavBackStackEntry,
-    navController: NavHostController
-) {
-    val serializedImageVo = navBackStackEntry.arguments!!.getString(NAVIGATION_PARAM_IMAGE_DETAIL)!!
-    val imageVO = NavUtils.fromJsonString<FlickerImageVO>(serializedImageVo)
-    ImageDetailScreen(
-        imageVO = imageVO,
-        onBackPressed = { navController.popBackStack() }
+    val backStack = rememberNavBackStack(
+        configuration = configuration,
+        ImageListKey
+    )
+
+    NavDisplay(
+        backStack = backStack,
+        onBack = {
+            if (backStack.size > 1) {
+                backStack.removeAt(backStack.lastIndex)
+            }
+        },
+        entryProvider = entryProvider {
+            entry<ImageListKey> {
+                ImagesScreen(
+                    stateHolder = imagesStateHolder,
+                    navigateToImageDetail = { imageVO ->
+                        backStack.add(ImageDetailKey(imageVO))
+                    }
+                )
+            }
+            entry<ImageDetailKey>(
+                metadata = NavDisplay.transitionSpec {
+                    slideInVertically(
+                        initialOffsetY = { it },
+                        animationSpec = tween(TransitionDurationMillis)
+                    ) togetherWith ExitTransition.KeepUntilTransitionsFinished
+                } + NavDisplay.popTransitionSpec {
+                    EnterTransition.None togetherWith
+                        slideOutVertically(
+                            targetOffsetY = { it },
+                            animationSpec = tween(TransitionDurationMillis)
+                        )
+                } + NavDisplay.predictivePopTransitionSpec {
+                    EnterTransition.None togetherWith
+                        slideOutVertically(
+                            targetOffsetY = { it },
+                            animationSpec = tween(TransitionDurationMillis)
+                        )
+                }
+            ) { key ->
+                ImageDetailScreen(
+                    imageVO = key.imageVO,
+                    onBackPressed = {
+                        if (backStack.size > 1) {
+                            backStack.removeAt(backStack.lastIndex)
+                        }
+                    }
+                )
+            }
+        }
     )
 }
-
-const val NAVIGATION_IMAGES_LIST = "flickerImages"
-const val NAVIGATION_PARAM_IMAGE_DETAIL = "imageDetail"
-const val NAVIGATION_IMAGE_DETAIL =
-    "flickerImages/detail?$NAVIGATION_PARAM_IMAGE_DETAIL={$NAVIGATION_PARAM_IMAGE_DETAIL}"

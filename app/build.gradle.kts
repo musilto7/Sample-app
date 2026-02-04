@@ -40,7 +40,7 @@ kotlin {
             implementation(libs.kotlinx.datetime)
             implementation(libs.koin.core)
             implementation(libs.koin.compose.multiplatform)
-            implementation(libs.navigation.compose.multiplatform)
+            implementation(libs.navigation3.ui)
         }
 
         commonTest.dependencies {
