@@ -1,15 +1,49 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
+# Built and generated
+build/
+out/
 .cxx
+.externalNativeBuild
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Gradle
+.gradle/
+
+# Local config and secrets
 local.properties
+*.local
+.env
+.env.*
+*.jks
+*.keystore
+
+# IDE – IntelliJ / Android Studio
+*.iml
+.idea/
+
+# Kotlin
+.kotlin/
+
+# Android
+/captures
+*.hprof
+
+# macOS
+.DS_Store
+
+# iOS / Xcode
+iosApp/DerivedData/
+**/xcuserdata/
+*.xcuserstate
+Pods/
+*.xcworkspace
+!default.xcworkspace
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+*.swp
+*~
