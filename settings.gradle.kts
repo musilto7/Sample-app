@@ -20,5 +20,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "My Flicker application"
-include(":app")
+include(":shared")
+include(":androidApp")
  
