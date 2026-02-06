@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.implementation
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
@@ -34,6 +35,11 @@ kotlin {
             baseName = "shared"
             isStatic = true
             binaryOption("bundleId", "cz.musilto5.myflickerapp.shared")
+            // Kotlin/Native Release framework linking can OOM in devirtualization/LTO.
+            // If you still hit OOM after increasing heap, keep this enabled for Release builds.
+            if (buildType.name.equals("RELEASE", ignoreCase = true)) {
+                freeCompilerArgs += listOf("-Xdisable-phases=DevirtualizationAnalysis")
+            }
             xcf.add(this)
         }
     }
@@ -45,6 +51,10 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
+            implementation(libs.koin.compose)
+            implementation(libs.kamel.image.default)
+            implementation(libs.androidx.lifecycle.savedstate)
+            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
@@ -137,8 +147,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-// OpenAPI generated code → commonMain
-kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(openapiOutputDir.resolve("src/commonMain/kotlin"))
+// OpenAPI generated code → commonMain (generator may use either path)
+val openapiSrcRoot = openapiOutputDir.resolve("src/commonMain/kotlin")
+kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(openapiSrcRoot)
+kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(openapiOutputDir.resolve("src/main/kotlin"))
 
 val packageName = "cz.musilto5.myflickerapp.data"
 val apiPackageName = "$packageName.api"
@@ -154,10 +166,13 @@ val generateApi by tasks.registering(org.openapitools.generator.gradle.plugin.ta
     generateApiDocumentation.set(false)
     generateModelTests.set(false)
     generateModelDocumentation.set(false)
-    additionalProperties.set(mapOf("dateLibrary" to "kotlinx-datetime"))
+    additionalProperties.set(mapOf(
+        "dateLibrary" to "kotlinx-datetime",
+        "sourceFolder" to "src/commonMain/kotlin"
+    ))
 }
 
-// Your previous fix (simplified)
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+// Ensure OpenAPI code is generated before any Kotlin compile (JVM, Android, iOS)
+tasks.matching { it.name.startsWith("compileKotlin") }.configureEach {
     dependsOn(generateApi)
 }

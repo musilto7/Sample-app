@@ -21,9 +21,7 @@ import kotlinx.serialization.modules.polymorphic
 private const val TransitionDurationMillis = 300
 
 @Composable
-fun FlickerAppNavigation(
-    imagesStateHolder: ImagesScreenStateHolder,
-) {
+fun FlickerAppNavigation() {
     val configuration = SavedStateConfiguration {
         serializersModule = SerializersModule {
             polymorphic(NavKey::class) {
@@ -48,7 +46,6 @@ fun FlickerAppNavigation(
         entryProvider = entryProvider {
             entry<ImageListKey> {
                 ImagesScreen(
-                    stateHolder = imagesStateHolder,
                     navigateToImageDetail = { imageVO ->
                         backStack.add(ImageDetailKey(imageVO))
                     }

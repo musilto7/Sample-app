@@ -1,9 +1,15 @@
 package cz.musilto5.myflickerapp.app
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.ComposeUIViewController
 import cz.musilto5.myflickerapp.app.di.iosDataModule
-import cz.musilto5.myflickerapp.app.di.iosPresentationModule
 import cz.musilto5.myflickerapp.presentation.App
+import cz.musilto5.myflickerapp.presentation.di.presentationModule
 import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesScreenStateHolder
 import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
@@ -12,8 +18,14 @@ import platform.UIKit.UIViewController
 fun MainViewController(): UIViewController {
     startKoinIfNeeded()
     return ComposeUIViewController {
-        val stateHolder: ImagesScreenStateHolder = koinInject()
-        App(stateHolder = stateHolder)
+        // Respect iOS safe areas (notch, home indicator).
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.safeDrawing)
+        ) {
+            App()
+        }
     }
 }
 
@@ -23,6 +35,6 @@ private fun startKoinIfNeeded() {
     if (koinStarted) return
     koinStarted = true
     startKoin {
-        modules(iosDataModule, iosPresentationModule)
+        modules(iosDataModule, presentationModule)
     }
 }

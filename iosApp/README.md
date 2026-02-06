@@ -42,7 +42,18 @@ Output:
 
 ## Setting up the Xcode project
 
-1. Open Xcode and create a new **App** project (or open `MyFlickerApp.xcodeproj` if provided).
+An Xcode project is provided in this folder.
+
+1. **Build the shared framework first** (from the **project root**):
+   ```bash
+   ./gradlew :shared:assembleSharedReleaseXCFramework
+   ```
+2. Open **`iosApp/MyFlickerApp.xcodeproj`** in Xcode (double‑click or `File → Open`).
+3. The project already references **shared.xcframework** at `../shared/build/XCFrameworks/release/shared.xcframework` (embedded in the app target). No extra framework search paths are needed.
+4. Select the **MyFlickerApp** scheme, choose a simulator or device, and run (⌘R).
+
+If you prefer to set up manually from a new project:
+1. Open Xcode and create a new **App** project.
 2. Set the **Framework Search Paths** (or add the framework):
    - **XCFramework:** `$(SRCROOT)/../shared/build/XCFrameworks/release` — one path for both simulator and device.
    - **Separate frameworks:** `$(SRCROOT)/../shared/build/bin/iosArm64/releaseFramework` and `$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/releaseFramework`.

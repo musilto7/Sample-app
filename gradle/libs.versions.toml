@@ -1,8 +1,9 @@
 [versions]
 agp = "9.0.0"
 coilCompose = "2.7.0"
-composeMultiplatform = "1.7.0"
+composeMultiplatform = "1.10.0"
 desugar_jdk_libs = "2.1.5"
+kamel = "1.0.9"
 koin = "4.1.1"
 kotlin = "2.3.0"
 coreKtx = "1.17.0"
@@ -12,6 +13,7 @@ espressoCore = "3.7.0"
 kotlinxCoroutinesTest = "1.10.2"
 ktor = "3.4.0"
 lifecycleRuntimeKtx = "2.10.0"
+jetbrainsLifecycle = "2.9.6"
 activityCompose = "1.12.3"
 composeBom = "2026.01.01"
 kotlinxSerialization = "1.10.0"
@@ -25,12 +27,15 @@ openapiGeneratorGradlePlugin = "7.14.0"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+kamel-image-default = { module = "media.kamel:kamel-image-default", version.ref = "kamel" }
 core-library-desugaring = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs"}
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-lifecycle-savedstate = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "jetbrainsLifecycle" }
+androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrainsLifecycle" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }

@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
 import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesViewState
 import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesScreenStateHolder
@@ -32,13 +33,16 @@ import cz.musilto5.myflickerapp.platform.NetworkImage
 import cz.musilto5.myflickerapp.generated.resources.Res
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.reload
+import cz.musilto5.myflickerapp.presentation.ImagesViewModel
 import org.jetbrains.compose.resources.stringResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ImagesScreen(
-    stateHolder: ImagesScreenStateHolder,
+    viewModel: ImagesViewModel = koinViewModel(),
     navigateToImageDetail: (FlickerImageVO) -> Unit,
 ) {
+    val stateHolder = viewModel.stateHolder
     val viewState by stateHolder.viewStates.collectAsState()
     val isSwitchChecked by stateHolder.switchState.collectAsState()
 
@@ -59,7 +63,7 @@ private fun ImageScreen(
     isSwitchChecked: Boolean,
     onSwitchCheckedChange: (Boolean) -> Unit,
     reloadImages: () -> Unit,
-    navigateToImageDetail: (FlickerImageVO) -> Unit
+    navigateToImageDetail: (FlickerImageVO) -> Unit,
 ) {
     Column {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -87,7 +91,7 @@ private fun ImageScreen(
 @Composable
 private fun Images(
     viewState: ImagesViewState,
-    navigateToImageDetail: (FlickerImageVO) -> Unit
+    navigateToImageDetail: (FlickerImageVO) -> Unit,
 ) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
@@ -115,7 +119,7 @@ private fun Images(
 @Composable
 private fun BoxScope.ProgressInfo(
     viewState: ImagesViewState,
-    reloadImages: () -> Unit
+    reloadImages: () -> Unit,
 ) {
     if (viewState.isLoading) {
         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))

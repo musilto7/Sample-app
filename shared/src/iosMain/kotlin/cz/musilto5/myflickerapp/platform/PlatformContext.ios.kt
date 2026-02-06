@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 
 actual fun createHttpClientEngine(): HttpClientEngine = Darwin.create {}
 
@@ -31,19 +33,12 @@ actual fun NetworkImage(
     modifier: Modifier,
     contentScale: ContentScale
 ) {
-    // Placeholder until an iOS image loader (e.g. Coil 3) is added
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surfaceVariant),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = url.takeLast(20).ifEmpty { "Image" },
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-    }
+    KamelImage(
+        resource = asyncPainterResource(data = url),
+        contentDescription = contentDescription,
+        modifier = modifier,
+        contentScale = contentScale
+    )
 }
 
 @Composable

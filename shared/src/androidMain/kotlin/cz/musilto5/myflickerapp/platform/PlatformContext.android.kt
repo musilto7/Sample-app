@@ -7,9 +7,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import coil.compose.AsyncImage
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.okhttp.OkHttp
+import io.kamel.image.KamelImage
+import io.kamel.image.asyncPainterResource
 import java.net.UnknownHostException
 import javax.net.ssl.SSLHandshakeException
 
@@ -27,8 +28,8 @@ actual fun NetworkImage(
     modifier: Modifier,
     contentScale: ContentScale
 ) {
-    AsyncImage(
-        model = url,
+    KamelImage(
+        resource = asyncPainterResource(data = url),
         contentDescription = contentDescription,
         modifier = modifier,
         contentScale = contentScale

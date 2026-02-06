@@ -9,13 +9,13 @@ import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.Images
 import cz.musilto5.myflickerapp.presentation.theme.MyFlickerApplicationTheme
 
 @Composable
-fun App(stateHolder: ImagesScreenStateHolder) {
+fun App() {
     MyFlickerApplicationTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            FlickerAppNavigation(imagesStateHolder = stateHolder)
+            FlickerAppNavigation()
         }
     }
 }

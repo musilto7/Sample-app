@@ -1,6 +1,7 @@
 package cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel
 
 import androidx.lifecycle.SavedStateHandle
+import cz.musilto5.myflickerapp.domain.core.Error
 import cz.musilto5.myflickerapp.domain.core.Result
 import cz.musilto5.myflickerapp.domain.feature.images.model.FlickerImage
 import cz.musilto5.myflickerapp.domain.feature.images.model.TagMode
@@ -10,8 +11,7 @@ import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
-import java.time.OffsetDateTime
-
+import kotlin.time.Clock
 
 class ImagesViewModelTest {
 
@@ -35,7 +35,7 @@ class ImagesViewModelTest {
             override suspend fun downloadImages(
                 tags: List<String>,
                 tagMode: TagMode
-            ): Result<List<FlickerImage>> {
+            ): Result<List<FlickerImage>, Error> {
                 return Result.Success(IMAGES_LIST)
             }
 
@@ -47,7 +47,7 @@ class ImagesViewModelTest {
     }
 
     companion object {
-        private val IMAGES_LIST = listOf(FlickerImage("title", "url", OffsetDateTime.now()))
+        private val IMAGES_LIST = listOf(FlickerImage("title", "url", Clock.System.now()))
     }
 
 }

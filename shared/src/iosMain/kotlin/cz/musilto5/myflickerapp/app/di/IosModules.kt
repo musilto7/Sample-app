@@ -19,16 +19,3 @@ val iosDataModule = module {
 }
 
 private val switchState = MutableStateFlow(false)
-
-val iosPresentationModule = module {
-    single { TextInputComponent(initialText = "") }
-    single<ImagesScreenStateHolder> {
-        ImagesScreenStateHolder(
-            scope = MainScope(),
-            textInputComponent = get(),
-            repository = get(),
-            switchState = switchState.asStateFlow(),
-            saveSwitchState = { switchState.value = it }
-        )
-    }
-}
