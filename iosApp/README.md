@@ -23,23 +23,6 @@ From the **project root** (MyFlickerapplication), run:
 Output: `shared/build/XCFrameworks/release/shared.xcframework`  
 Use this single path in Xcode for both simulator and device.
 
-**Option 2: Separate frameworks per target**
-
-```bash
-# Both targets
-./gradlew :shared:linkReleaseFrameworkIosArm64 :shared:linkReleaseFrameworkIosSimulatorArm64
-
-# Device only (iosArm64)
-./gradlew :shared:linkReleaseFrameworkIosArm64
-
-# Simulator only (Apple Silicon)
-./gradlew :shared:linkReleaseFrameworkIosSimulatorArm64
-```
-
-Output:
-- Device: `shared/build/bin/iosArm64/releaseFramework/shared.framework`
-- Simulator: `shared/build/bin/iosSimulatorArm64/releaseFramework/shared.framework`
-
 ## Setting up the Xcode project
 
 An Xcode project is provided in this folder.
@@ -60,25 +43,3 @@ If you prefer to set up manually from a new project:
 3. Add **shared.xcframework** (or **shared.framework**) to the app target: **General → Frameworks, Libraries, and Embedded Content** → **+** → **Add Other** → select the framework. Set to **Embed & Sign**.
 4. Ensure the app target has **Build Phases → Link Binary With Libraries** including the framework.
 5. Build and run on simulator or device.
-
-## Running from terminal (simulator)
-
-After building (XCFramework or simulator framework):
-
-```bash
-./gradlew :shared:assembleSharedReleaseXCFramework
-# or
-./gradlew :shared:linkReleaseFrameworkIosSimulatorArm64
-```
-
-Then open the Xcode project, select an iOS simulator, and run (⌘R).
-
-## Kotlin entry point
-
-The Compose UI is provided by `MainViewController()` in the shared framework. From Swift it is called as:
-
-```swift
-MainViewController_iosKt.MainViewController()
-```
-
-This returns a `UIViewController` that hosts the full Compose Multiplatform UI.

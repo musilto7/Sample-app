@@ -6,7 +6,7 @@ import cz.musilto5.myflickerapp.domain.core.Result
 import cz.musilto5.myflickerapp.domain.feature.images.model.FlickerImage
 import cz.musilto5.myflickerapp.domain.feature.images.model.TagMode
 import cz.musilto5.myflickerapp.domain.feature.images.repository.ImagesRepository
-import cz.musilto5.myflickerapp.presentation.ImagesViewModel
+import cz.musilto5.myflickerapp.presentation.feature.image.list.ImagesViewModel
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert

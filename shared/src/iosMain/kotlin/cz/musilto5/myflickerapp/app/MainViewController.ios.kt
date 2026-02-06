@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.ComposeUIViewController
-import cz.musilto5.myflickerapp.app.di.iosDataModule
+import cz.musilto5.myflickerapp.data.di.dataModule
 import cz.musilto5.myflickerapp.presentation.App
 import cz.musilto5.myflickerapp.presentation.di.presentationModule
-import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesScreenStateHolder
-import org.koin.compose.koinInject
 import org.koin.core.context.startKoin
 import platform.UIKit.UIViewController
 
@@ -35,6 +33,6 @@ private fun startKoinIfNeeded() {
     if (koinStarted) return
     koinStarted = true
     startKoin {
-        modules(iosDataModule, presentationModule)
+        modules(dataModule, presentationModule)
     }
 }

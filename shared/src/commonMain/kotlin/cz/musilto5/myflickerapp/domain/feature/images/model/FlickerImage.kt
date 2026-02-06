@@ -1,6 +1,6 @@
 package cz.musilto5.myflickerapp.domain.feature.images.model
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class FlickerImage(
     val title: String?,

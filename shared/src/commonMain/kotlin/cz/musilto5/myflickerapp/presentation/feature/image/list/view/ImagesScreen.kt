@@ -24,16 +24,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
 import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesViewState
-import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesScreenStateHolder
 import cz.musilto5.myflickerapp.presentation.feature.image.model.FlickerImageVO
 import cz.musilto5.myflickerapp.platform.NetworkImage
 import cz.musilto5.myflickerapp.generated.resources.Res
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.reload
-import cz.musilto5.myflickerapp.presentation.ImagesViewModel
+import cz.musilto5.myflickerapp.presentation.feature.image.list.ImagesViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -43,8 +42,8 @@ fun ImagesScreen(
     navigateToImageDetail: (FlickerImageVO) -> Unit,
 ) {
     val stateHolder = viewModel.stateHolder
-    val viewState by stateHolder.viewStates.collectAsState()
-    val isSwitchChecked by stateHolder.switchState.collectAsState()
+    val viewState by stateHolder.viewStates.collectAsStateWithLifecycle()
+    val isSwitchChecked by stateHolder.switchState.collectAsStateWithLifecycle()
 
     ImageScreen(
         viewState = viewState,

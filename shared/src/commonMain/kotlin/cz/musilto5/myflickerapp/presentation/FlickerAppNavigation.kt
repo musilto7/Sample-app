@@ -7,14 +7,13 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import cz.musilto5.myflickerapp.presentation.feature.image.detail.view.ImageDetailScreen
 import cz.musilto5.myflickerapp.presentation.feature.image.list.view.ImagesScreen
-import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesScreenStateHolder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 
@@ -43,6 +42,7 @@ fun FlickerAppNavigation() {
                 backStack.removeAt(backStack.lastIndex)
             }
         },
+        // todo add decorators
         entryProvider = entryProvider {
             entry<ImageListKey> {
                 ImagesScreen(

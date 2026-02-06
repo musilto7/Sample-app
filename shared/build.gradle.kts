@@ -147,10 +147,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 }
 
-// OpenAPI generated code → commonMain (generator may use either path)
 val openapiSrcRoot = openapiOutputDir.resolve("src/commonMain/kotlin")
 kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(openapiSrcRoot)
-kotlin.sourceSets.getByName("commonMain").kotlin.srcDir(openapiOutputDir.resolve("src/main/kotlin"))
 
 val packageName = "cz.musilto5.myflickerapp.data"
 val apiPackageName = "$packageName.api"
@@ -158,7 +156,7 @@ val apiPackageName = "$packageName.api"
 val generateApi by tasks.registering(org.openapitools.generator.gradle.plugin.tasks.GenerateTask::class) {
     generatorName.set("kotlin")
     library.set("multiplatform")
-    inputSpec.set("$projectDir/src/main/openapi/flipper-api-swagger.yaml")
+    inputSpec.set("$projectDir/src/commonMain/openapi/flipper-api-swagger.yaml")
     outputDir.set(openapiOutputDir.absolutePath)
     apiPackage.set("$apiPackageName.service")
     modelPackage.set("$apiPackageName.model")

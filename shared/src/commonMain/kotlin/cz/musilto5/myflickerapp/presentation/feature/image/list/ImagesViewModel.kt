@@ -1,4 +1,4 @@
-package cz.musilto5.myflickerapp.presentation
+package cz.musilto5.myflickerapp.presentation.feature.image.list
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

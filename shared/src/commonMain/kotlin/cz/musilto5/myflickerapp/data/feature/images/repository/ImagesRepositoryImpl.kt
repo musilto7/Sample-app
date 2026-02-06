@@ -2,6 +2,8 @@ package cz.musilto5.myflickerapp.data.feature.images.repository
 
 import cz.musilto5.myflickerapp.data.api.service.FlickerApi
 import cz.musilto5.myflickerapp.data.core.callApi
+import cz.musilto5.myflickerapp.domain.core.Error
+import cz.musilto5.myflickerapp.domain.core.Result
 import cz.musilto5.myflickerapp.domain.core.map
 import cz.musilto5.myflickerapp.domain.feature.images.model.FlickerImage
 import cz.musilto5.myflickerapp.domain.feature.images.model.TagMode
@@ -14,7 +16,7 @@ class ImagesRepositoryImpl(
     override suspend fun downloadImages(
         tags: List<String>,
         tagMode: TagMode,
-    ): cz.musilto5.myflickerapp.domain.core.Result<List<FlickerImage>, cz.musilto5.myflickerapp.domain.core.Error> {
+    ): Result<List<FlickerImage>, Error> {
         return callApi {
             flickerApi.getImages(
                 tags = tags.joinToString(","),

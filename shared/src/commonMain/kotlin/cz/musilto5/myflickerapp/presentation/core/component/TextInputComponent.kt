@@ -8,19 +8,27 @@ import kotlinx.coroutines.flow.asStateFlow
 class TextInputComponent(
     initialText: String,
     private val savedStateHandle: SavedStateHandle,
-    uniqueComponentName: String = "text_input_component",
+    uniqueComponentName: String,
 ) {
-    private val stateKey = "TextInputComponent:$uniqueComponentName:text"
+    private val stateKey = "$COMPONENT_NAME-$uniqueComponentName"
 
     private val _viewState = MutableStateFlow(
         TextInputComponentModel(
-            text = savedStateHandle[stateKey] ?: initialText
+            text = savedStateHandle[stateKey] ?: initialText.also {
+                // Persist initial value the first time it's used
+                savedStateHandle[stateKey] = it
+            }
         )
     )
     val viewState: StateFlow<TextInputComponentModel> = _viewState.asStateFlow()
 
     fun updateText(text: String) {
         _viewState.value = TextInputComponentModel(text)
+        // Only store the raw String in SavedStateHandle
         savedStateHandle[stateKey] = text
+    }
+
+    companion object {
+        private const val COMPONENT_NAME = "text_input_component"
     }
 }
