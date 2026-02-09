@@ -1,8 +1,8 @@
 package cz.musilto5.myflickerapp.app
 
 import android.app.Application
-import cz.musilto5.myflickerapp.data.di.dataModule
-import cz.musilto5.myflickerapp.presentation.di.presentationModule
+import cz.musilto5.myflickerapp.app.di.dataModule
+import cz.musilto5.myflickerapp.app.di.presentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 

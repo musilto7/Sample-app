@@ -1,4 +1,4 @@
-package cz.musilto5.myflickerapp.presentation
+package cz.musilto5.myflickerapp.presentation.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition

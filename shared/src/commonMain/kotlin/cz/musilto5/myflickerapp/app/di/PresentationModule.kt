@@ -1,7 +1,8 @@
-package cz.musilto5.myflickerapp.presentation.di
+package cz.musilto5.myflickerapp.app.di
 
-import cz.musilto5.myflickerapp.presentation.feature.image.list.ImagesViewModel
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
+import cz.musilto5.myflickerapp.presentation.feature.image.ImageConstants
+import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -13,7 +14,7 @@ val presentationModule = module {
             textInputComponent = TextInputComponent(
                 initialText = "",
                 savedStateHandle = get(),
-                uniqueComponentName = "images_text_input"
+                uniqueComponentName = ImageConstants.TEXT_INPUT_KEY
             )
         )
     }

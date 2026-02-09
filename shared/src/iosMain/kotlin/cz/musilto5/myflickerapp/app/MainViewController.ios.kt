@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.ComposeUIViewController
-import cz.musilto5.myflickerapp.data.di.dataModule
+import cz.musilto5.myflickerapp.app.di.dataModule
+import cz.musilto5.myflickerapp.app.di.presentationModule
 import cz.musilto5.myflickerapp.presentation.App
-import cz.musilto5.myflickerapp.presentation.di.presentationModule
 import org.koin.core.context.startKoin
 import platform.UIKit.UIViewController
 

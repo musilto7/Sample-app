@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesScreenStateHolder
+import cz.musilto5.myflickerapp.presentation.navigation.FlickerAppNavigation
 import cz.musilto5.myflickerapp.presentation.theme.MyFlickerApplicationTheme
 
 @Composable

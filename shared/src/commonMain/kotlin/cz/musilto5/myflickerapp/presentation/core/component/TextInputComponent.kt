@@ -4,6 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class TextInputComponentModel(val text: String)
 
 class TextInputComponent(
     initialText: String,
@@ -15,7 +19,6 @@ class TextInputComponent(
     private val _viewState = MutableStateFlow(
         TextInputComponentModel(
             text = savedStateHandle[stateKey] ?: initialText.also {
-                // Persist initial value the first time it's used
                 savedStateHandle[stateKey] = it
             }
         )
@@ -24,7 +27,6 @@ class TextInputComponent(
 
     fun updateText(text: String) {
         _viewState.value = TextInputComponentModel(text)
-        // Only store the raw String in SavedStateHandle
         savedStateHandle[stateKey] = text
     }
 

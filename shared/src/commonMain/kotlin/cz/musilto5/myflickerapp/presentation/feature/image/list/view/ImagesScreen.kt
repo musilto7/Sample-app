@@ -32,7 +32,7 @@ import cz.musilto5.myflickerapp.platform.NetworkImage
 import cz.musilto5.myflickerapp.generated.resources.Res
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.reload
-import cz.musilto5.myflickerapp.presentation.feature.image.list.ImagesViewModel
+import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesViewModel
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -123,12 +123,12 @@ private fun BoxScope.ProgressInfo(
     if (viewState.isLoading) {
         CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
     }
-    viewState.errorMessage?.let { errorMessage ->
+    viewState.errorResource?.let { errorResource ->
         Column(
             modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = errorMessage)
+            Text(text = stringResource(errorResource))
             Button(onClick = reloadImages) {
                 Text(stringResource(Res.string.reload))
             }

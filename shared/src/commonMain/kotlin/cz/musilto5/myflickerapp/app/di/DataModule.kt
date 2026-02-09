@@ -1,4 +1,4 @@
-package cz.musilto5.myflickerapp.data.di
+package cz.musilto5.myflickerapp.app.di
 
 import cz.musilto5.myflickerapp.data.core.createFlickerApi
 import cz.musilto5.myflickerapp.data.feature.images.repository.ImagesRepositoryImpl
