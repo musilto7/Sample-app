@@ -5,14 +5,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.ColorPainter
 import androidx.compose.ui.layout.ContentScale
-import io.kamel.image.KamelImage
-import io.kamel.image.asyncPainterResource
+import coil3.compose.AsyncImage
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.darwin.Darwin
 
 // TODO refactor this file
-
 actual fun createHttpClientEngine(): HttpClientEngine = Darwin.create {}
 
 actual fun isNetworkError(throwable: Throwable): Boolean {
@@ -31,11 +30,14 @@ actual fun NetworkImage(
     modifier: Modifier,
     contentScale: ContentScale
 ) {
-    KamelImage(
-        resource = asyncPainterResource(data = url),
+    AsyncImage(
+        model = url,
         contentDescription = contentDescription,
         modifier = modifier,
-        contentScale = contentScale
+        contentScale = contentScale,
+        placeholder = ColorPainter(MaterialTheme.colorScheme.surfaceVariant),
+        error = ColorPainter(MaterialTheme.colorScheme.errorContainer),
+        fallback = ColorPainter(MaterialTheme.colorScheme.surfaceVariant)
     )
 }
 

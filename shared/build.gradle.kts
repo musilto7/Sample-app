@@ -46,13 +46,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.material3)
+            implementation(libs.compose.ui)
+            implementation(libs.compose.components.resources)
             implementation(libs.koin.compose)
-            implementation(libs.kamel.image.default)
             implementation(libs.androidx.lifecycle.savedstate)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.ktor.client.core)
@@ -64,6 +63,8 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose.multiplatform)
             implementation(libs.navigation3.ui)
+            implementation(libs.coil3.compose)
+            implementation(libs.coil3.network.ktor3)
         }
 
         iosMain.dependencies {
@@ -80,7 +81,7 @@ kotlin {
 }
 
 android {
-    namespace = "cz.musilto5.myflickerapp"
+    namespace = "cz.musilto5.myflickerapp.shared"
     compileSdk = 36
 
     defaultConfig {
@@ -127,7 +128,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons)
-    implementation(libs.coil.compose)
     implementation(libs.koin.android)
     implementation(libs.koin.compose)
 

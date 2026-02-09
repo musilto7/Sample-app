@@ -1,6 +1,14 @@
-# My Flicker Application
+# My Flickr Application
 
 A **Kotlin Multiplatform (KMP)** app for browsing Flickr images, with a shared UI built with **Compose Multiplatform** and **Navigation 3**. It runs on **Android** and **iOS** from a single shared codebase.
+
+## Features
+
+- Search Flickr images by tags (comma-separated)
+- Tag mode toggle (ALL vs ANY)
+- View image details with full-screen display
+- Navigation with slide-in/slide-out animations
+- State preservation across configuration changes and process death
 
 ## Project structure
 
@@ -22,14 +30,23 @@ MyFlickerapplication/
 
 ## Tech stack
 
-- **Kotlin Multiplatform** – shared logic and UI
-- **Compose Multiplatform** – UI (Material 3)
-- **Navigation 3** – navigation and back stack
+- **Kotlin Multiplatform** – shared logic and UI across Android and iOS
+- **Compose Multiplatform 1.10.0** – declarative UI (Material 3 1.10.0-alpha05)
+- **Navigation 3** – type-safe navigation with savable back stack
 - **Koin** – dependency injection
-- **Ktor** – HTTP client (OkHttp on Android, Darwin on iOS)
-- **Kotlinx Serialization & DateTime**
-- **Coil** – image loading (Android; iOS uses placeholder until Coil 3 multiplatform)
-- **Lifecycle ViewModel (KMP)** – `ImagesViewModel` in `commonMain`
+- **Ktor 3.4.0** – HTTP client (OkHttp on Android, Darwin engine on iOS)
+- **Kotlinx Serialization** – JSON serialization for API and navigation state
+- **Kotlinx DateTime** – date/time handling
+- **Coil 3.1.0** – async image loading (multiplatform with Ktor network fetcher)
+- **Lifecycle ViewModel (KMP)** – `ImagesViewModel` in `commonMain` with `SavedStateHandle`
+- **OpenAPI Generator** – generates Flickr API client from Swagger spec
+
+### Architecture
+
+- **Clean Architecture** – domain, data, presentation layers
+- **MVVM** – `ImagesViewModel` manages UI state via `ImagesScreenStateHolder`
+- **Unidirectional data flow** – UI events → ViewModel → Repository → Domain
+- **Expect/actual** – platform-specific implementations (HTTP engines, image loading)
 
 ## Prerequisites
 
@@ -50,7 +67,21 @@ Or open the project in Android Studio, select the **androidApp** run configurati
 
 ## Running the iOS app
 
-See **[iosApp/README.md](iosApp/README.md)** for how to build the shared framework and run the app in Xcode.
+See **[iosApp/README.md](iosApp/README.md)** for detailed instructions.
+
+**Quick start:**
+
+```bash
+# Build the shared framework (debug; copies to release folder for Xcode)
+./iosApp/build-xcframework-debug.sh
+
+# Open Xcode project
+open iosApp/MyFlickerApp.xcodeproj
+
+# Select simulator or device and press ⌘R to run
+```
+
+The `iosApp` folder includes scripts to build debug and release XCFrameworks.
 
 ## Running tests
 
@@ -62,6 +93,14 @@ See **[iosApp/README.md](iosApp/README.md)** for how to build the shared framewo
   `./gradlew :shared:connectedDebugAndroidTest`  
   (with an emulator or device connected.)
 
-## License
+## Project highlights
 
-See the repository license file if present.
+- **100% shared UI** – all screens (list, detail, navigation) are in `shared/src/commonMain`
+- **Multiplatform ViewModel** – uses JetBrains `androidx.lifecycle` for state management on both platforms
+- **Savable navigation state** – `rememberNavBackStack` with polymorphic `NavKey` serialization
+- **Type-safe navigation** – `ImageListKey` and `ImageDetailKey` with serializable parameters
+- **Platform-specific integrations** – OkHttp/Coil on Android, Darwin/Coil on iOS
+
+## Contributing
+
+This is a sample/demo project. Feel free to fork and adapt for your needs.
