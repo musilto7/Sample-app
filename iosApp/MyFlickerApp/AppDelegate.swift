@@ -11,7 +11,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         window = UIWindow(frame: UIScreen.main.bounds)
-        // Kotlin framework exports: MainViewController_iosKt.MainViewController()
         window?.rootViewController = MainViewController_iosKt.MainViewController()
         window?.makeKeyAndVisible()
         return true

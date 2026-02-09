@@ -10,9 +10,25 @@ This folder contains the native iOS app that hosts the shared Kotlin Multiplatfo
 
 ## Building the shared framework
 
-From the **project root** (MyFlickerapplication), run:
+### Option A: Scripts (from `iosApp` or project root)
 
-**Option 1: XCFramework (one artifact for simulator and device)**
+From the repo root:
+
+```bash
+# Release (for distribution / App Store)
+./iosApp/build-xcframework.sh
+
+# Debug (faster build, for development; copies to release folder so Xcode uses it)
+./iosApp/build-xcframework-debug.sh
+```
+
+The release script only builds. The debug script builds the debug XCFramework and **copies it to** `shared/build/XCFrameworks/release/shared.xcframework`, so Xcode (which points at the release path) uses the debug build without changing the project. For store/distribution builds, run the release script to put a real release framework in that folder.
+
+### Option B: Gradle from project root
+
+From the **project root** (MyFlickerapplication):
+
+**XCFramework (one artifact for simulator and device)**
 
 ```bash
 ./gradlew :shared:assembleSharedReleaseXCFramework
@@ -21,16 +37,13 @@ From the **project root** (MyFlickerapplication), run:
 ```
 
 Output: `shared/build/XCFrameworks/release/shared.xcframework`  
-Use this single path in Xcode for both simulator and device.
+Use this path in Xcode for both simulator and device.
 
 ## Setting up the Xcode project
 
 An Xcode project is provided in this folder.
 
-1. **Build the shared framework first** (from the **project root**):
-   ```bash
-   ./gradlew :shared:assembleSharedReleaseXCFramework
-   ```
+1. **Build the shared framework first**: run `./iosApp/build-xcframework.sh` or from the project root: `./gradlew :shared:assembleSharedReleaseXCFramework`
 2. Open **`iosApp/MyFlickerApp.xcodeproj`** in Xcode (double‑click or `File → Open`).
 3. The project already references **shared.xcframework** at `../shared/build/XCFrameworks/release/shared.xcframework` (embedded in the app target). No extra framework search paths are needed.
 4. Select the **MyFlickerApp** scheme, choose a simulator or device, and run (⌘R).

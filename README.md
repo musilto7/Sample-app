@@ -28,7 +28,7 @@ MyFlickerapplication/
 - **Koin** – dependency injection
 - **Ktor** – HTTP client (OkHttp on Android, Darwin on iOS)
 - **Kotlinx Serialization & DateTime**
-- **Kamel** – image loading in shared code
+- **Coil** – image loading (Android; iOS uses placeholder until Coil 3 multiplatform)
 - **Lifecycle ViewModel (KMP)** – `ImagesViewModel` in `commonMain`
 
 ## Prerequisites
@@ -50,33 +50,7 @@ Or open the project in Android Studio, select the **androidApp** run configurati
 
 ## Running the iOS app
 
-1. **Build the shared framework** (from the project root):
-
-   ```bash
-   ./gradlew :shared:assembleReleaseXCFramework
-   ```
-
-   Output: `shared/build/XCFrameworks/release/shared.xcframework`
-
-2. **Open the iOS project in Xcode**:
-
-   ```bash
-   open iosApp/MyFlickerApp.xcodeproj
-   ```
-
-3. Ensure the **MyFlickerApp** target has **shared.xcframework** in **Frameworks, Libraries, and Embedded Content** (Embed & Sign). The project is set up to use `../shared/build/XCFrameworks/release`.
-
-4. Select a simulator or device and press **⌘R** to run.
-
-For more detail (per-architecture frameworks, manual setup), see **[iosApp/README.md](iosApp/README.md)**.
-
-## Building the shared framework (reference)
-
-| Task | Output | Use case |
-|------|--------|----------|
-| `./gradlew :shared:assembleReleaseXCFramework` | `shared/build/XCFrameworks/release/shared.xcframework` | One artifact for simulator + device (recommended) |
-| `./gradlew :shared:linkReleaseFrameworkIosArm64` | `shared/build/bin/iosArm64/releaseFramework/shared.framework` | Device only |
-| `./gradlew :shared:linkReleaseFrameworkIosSimulatorArm64` | `shared/build/bin/iosSimulatorArm64/releaseFramework/shared.framework` | Simulator only |
+See **[iosApp/README.md](iosApp/README.md)** for how to build the shared framework and run the app in Xcode.
 
 ## Running tests
 
