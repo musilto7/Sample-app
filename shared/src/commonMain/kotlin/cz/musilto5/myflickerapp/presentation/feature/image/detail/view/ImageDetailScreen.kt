@@ -13,12 +13,14 @@ import cz.musilto5.myflickerapp.platform.CloseNavigationIcon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.tooling.preview.Preview
 import cz.musilto5.myflickerapp.presentation.feature.image.model.FlickerImageVO
 import cz.musilto5.myflickerapp.platform.NetworkImage
 import cz.musilto5.myflickerapp.generated.resources.Res
 import cz.musilto5.myflickerapp.generated.resources.close_button_content_description
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.image_detail_screen_title
+import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviewData
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -63,5 +65,23 @@ private fun ImageDetailTopAppBar(
                 Text(stringResource(Res.string.image_detail_screen_title))
             }
         }
+    )
+}
+
+@Preview
+@Composable
+private fun ImageDetailScreenPreview() {
+    ImageDetailScreen(
+        imageVO = ImagesScreenPreviewData.sampleImages[0],
+        onBackPressed = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ImageDetailScreenNoTitlePreview() {
+    ImageDetailScreen(
+        imageVO = ImagesScreenPreviewData.sampleImages[4],
+        onBackPressed = {}
     )
 }

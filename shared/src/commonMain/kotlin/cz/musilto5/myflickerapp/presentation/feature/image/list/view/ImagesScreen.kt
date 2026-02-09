@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
 import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesViewState
@@ -33,6 +34,7 @@ import cz.musilto5.myflickerapp.generated.resources.Res
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.reload
 import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesViewModel
+import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviewData
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -134,4 +136,43 @@ private fun BoxScope.ProgressInfo(
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun ImagesScreenPreview() {
+    ImageScreen(
+        viewState = ImagesScreenPreviewData.loadedViewState,
+        textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("nature"),
+        isSwitchChecked = false,
+        onSwitchCheckedChange = {},
+        reloadImages = {},
+        navigateToImageDetail = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ImagesScreenLoadingPreview() {
+    ImageScreen(
+        viewState = ImagesScreenPreviewData.loadingViewState,
+        textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("loading"),
+        isSwitchChecked = true,
+        onSwitchCheckedChange = {},
+        reloadImages = {},
+        navigateToImageDetail = {}
+    )
+}
+
+@Preview
+@Composable
+private fun ImagesScreenErrorPreview() {
+    ImageScreen(
+        viewState = ImagesScreenPreviewData.errorViewState,
+        textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("error"),
+        isSwitchChecked = false,
+        onSwitchCheckedChange = {},
+        reloadImages = {},
+        navigateToImageDetail = {}
+    )
 }
