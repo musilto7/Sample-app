@@ -54,6 +54,7 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.androidx.lifecycle.savedstate)
             implementation(libs.androidx.lifecycle.viewmodel)
+            implementation(libs.androidx.lifecycle.viewmodel.nav3)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
