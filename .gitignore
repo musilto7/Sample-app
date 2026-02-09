@@ -10,6 +10,7 @@ out/
 
 # Gradle
 .gradle/
+gradle-app.setting
 
 # Local config and secrets
 local.properties
@@ -21,25 +22,76 @@ local.properties
 
 # IDE – IntelliJ / Android Studio
 *.iml
-.idea/
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/gradle.xml
+.idea/assetWizardSettings.xml
+.idea/dictionaries
+.idea/libraries
+.idea/caches
+.idea/modules.xml
+.idea/navEditor.xml
+.idea/deploymentTargetSelector.xml
+.idea/markdown.xml
+.idea/xcode.xml
+
+# Keep these .idea files (if you want to share IDE settings)
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+# Uncomment to keep run configurations:
+# !.idea/runConfigurations/
 
 # Kotlin
 .kotlin/
+kotlin-js-store/
 
 # Android
 /captures
 *.hprof
+.navigation/
+
+# Kotlin Multiplatform - all build directories
+**/build/
+shared/build/
+androidApp/build/
+
+# OpenAPI Generated Code (if you want to regenerate on each build)
+# shared/build/generated/openapi/
 
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
 # iOS / Xcode
 iosApp/DerivedData/
+iosApp/build/
 **/xcuserdata/
 *.xcuserstate
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
 Pods/
+Podfile.lock
 *.xcworkspace
 !default.xcworkspace
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# XCFramework outputs (generated on each build)
+shared/build/XCFrameworks/
+shared/build/bin/
+
+# CocoaPods
+iosApp/Pods/
+iosApp/*.xcworkspace
+
+# Swift Package Manager
+.swiftpm/
+*.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
 
 # Logs and temp
 *.log
@@ -47,3 +99,7 @@ Pods/
 *.temp
 *.swp
 *~
+
+# Test results
+test-results/
+*.test
