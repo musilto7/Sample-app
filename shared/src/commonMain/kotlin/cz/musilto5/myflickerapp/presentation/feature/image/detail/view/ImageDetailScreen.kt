@@ -21,6 +21,7 @@ import cz.musilto5.myflickerapp.generated.resources.close_button_content_descrip
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.image_detail_screen_title
 import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviewData
+import cz.musilto5.myflickerapp.presentation.theme.MyFlickerApplicationTheme
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -71,17 +72,32 @@ private fun ImageDetailTopAppBar(
 @Preview
 @Composable
 private fun ImageDetailScreenPreview() {
-    ImageDetailScreen(
-        imageVO = ImagesScreenPreviewData.sampleImages[0],
-        onBackPressed = {}
-    )
+    MyFlickerApplicationTheme {
+        ImageDetailScreen(
+            imageVO = ImagesScreenPreviewData.sampleImages[0],
+            onBackPressed = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ImageDetailScreenDarkPreview() {
+    MyFlickerApplicationTheme(darkTheme = true) {
+        ImageDetailScreen(
+            imageVO = ImagesScreenPreviewData.sampleImages[0],
+            onBackPressed = {}
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun ImageDetailScreenNoTitlePreview() {
-    ImageDetailScreen(
-        imageVO = ImagesScreenPreviewData.sampleImages[4],
-        onBackPressed = {}
-    )
+    MyFlickerApplicationTheme {
+        ImageDetailScreen(
+            imageVO = ImagesScreenPreviewData.sampleImages[4],
+            onBackPressed = {}
+        )
+    }
 }

@@ -35,6 +35,7 @@ import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.reload
 import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesViewModel
 import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviewData
+import cz.musilto5.myflickerapp.presentation.theme.MyFlickerApplicationTheme
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -66,20 +67,25 @@ private fun ImageScreen(
     reloadImages: () -> Unit,
     navigateToImageDetail: (FlickerImageVO) -> Unit,
 ) {
-    Column {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
             val textState by textInputComponent.viewState.collectAsState()
             TextField(
                 value = textState.text,
                 onValueChange = textInputComponent::updateText,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .weight(1f),
+                modifier = Modifier.weight(1f),
             )
             Switch(
                 checked = isSwitchChecked,
                 onCheckedChange = onSwitchCheckedChange,
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(start = 16.dp)
             )
         }
         Box(modifier = Modifier.fillMaxSize()) {
@@ -141,38 +147,59 @@ private fun BoxScope.ProgressInfo(
 @Preview
 @Composable
 private fun ImagesScreenPreview() {
-    ImageScreen(
-        viewState = ImagesScreenPreviewData.loadedViewState,
-        textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("nature"),
-        isSwitchChecked = false,
-        onSwitchCheckedChange = {},
-        reloadImages = {},
-        navigateToImageDetail = {}
-    )
+    MyFlickerApplicationTheme {
+        ImageScreen(
+            viewState = ImagesScreenPreviewData.loadedViewState,
+            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("nature"),
+            isSwitchChecked = false,
+            onSwitchCheckedChange = {},
+            reloadImages = {},
+            navigateToImageDetail = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ImagesScreenDarkPreview() {
+    MyFlickerApplicationTheme(darkTheme = true) {
+        ImageScreen(
+            viewState = ImagesScreenPreviewData.loadedViewState,
+            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("nature"),
+            isSwitchChecked = false,
+            onSwitchCheckedChange = {},
+            reloadImages = {},
+            navigateToImageDetail = {}
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun ImagesScreenLoadingPreview() {
-    ImageScreen(
-        viewState = ImagesScreenPreviewData.loadingViewState,
-        textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("loading"),
-        isSwitchChecked = true,
-        onSwitchCheckedChange = {},
-        reloadImages = {},
-        navigateToImageDetail = {}
-    )
+    MyFlickerApplicationTheme {
+        ImageScreen(
+            viewState = ImagesScreenPreviewData.loadingViewState,
+            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("loading"),
+            isSwitchChecked = true,
+            onSwitchCheckedChange = {},
+            reloadImages = {},
+            navigateToImageDetail = {}
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun ImagesScreenErrorPreview() {
-    ImageScreen(
-        viewState = ImagesScreenPreviewData.errorViewState,
-        textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("error"),
-        isSwitchChecked = false,
-        onSwitchCheckedChange = {},
-        reloadImages = {},
-        navigateToImageDetail = {}
-    )
+    MyFlickerApplicationTheme {
+        ImageScreen(
+            viewState = ImagesScreenPreviewData.errorViewState,
+            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("error"),
+            isSwitchChecked = false,
+            onSwitchCheckedChange = {},
+            reloadImages = {},
+            navigateToImageDetail = {}
+        )
+    }
 }
