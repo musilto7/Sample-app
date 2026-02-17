@@ -1,5 +1,9 @@
 package cz.musilto5.myflickerapp.presentation.feature.image.list.view
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -24,17 +28,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
-import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesViewState
+import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesScreenState
 import cz.musilto5.myflickerapp.presentation.feature.image.model.FlickerImageVO
 import cz.musilto5.myflickerapp.platform.NetworkImage
 import cz.musilto5.myflickerapp.generated.resources.Res
+import cz.musilto5.myflickerapp.generated.resources.empty_images
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.reload
 import cz.musilto5.myflickerapp.presentation.feature.image.list.viewModel.ImagesViewModel
-import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviewData
+import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviews
 import cz.musilto5.myflickerapp.presentation.theme.MyFlickerApplicationTheme
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -44,23 +50,22 @@ fun ImagesScreen(
     viewModel: ImagesViewModel = koinViewModel(),
     navigateToImageDetail: (FlickerImageVO) -> Unit,
 ) {
-    val stateHolder = viewModel.stateHolder
-    val viewState by stateHolder.viewStates.collectAsStateWithLifecycle()
-    val isSwitchChecked by stateHolder.switchState.collectAsStateWithLifecycle()
+    val screenState by viewModel.screenState.collectAsStateWithLifecycle()
+    val isSwitchChecked by viewModel.switchComponent.checkedState.collectAsStateWithLifecycle()
 
     ImageScreen(
-        viewState = viewState,
-        textInputComponent = stateHolder.textInputComponent,
+        screenState = screenState,
+        textInputComponent = viewModel.textInputComponent,
         isSwitchChecked = isSwitchChecked,
-        onSwitchCheckedChange = stateHolder::onSwitchCheckedChange,
-        reloadImages = stateHolder::reloadImages,
+        onSwitchCheckedChange = viewModel.switchComponent::setChecked,
+        reloadImages = viewModel::reloadImages,
         navigateToImageDetail = navigateToImageDetail,
     )
 }
 
 @Composable
 private fun ImageScreen(
-    viewState: ImagesViewState,
+    screenState: ImagesScreenState,
     textInputComponent: TextInputComponent,
     isSwitchChecked: Boolean,
     onSwitchCheckedChange: (Boolean) -> Unit,
@@ -89,15 +94,74 @@ private fun ImageScreen(
             )
         }
         Box(modifier = Modifier.fillMaxSize()) {
-            Images(viewState, navigateToImageDetail)
-            ProgressInfo(viewState, reloadImages)
+            val contentState = when {
+                screenState.isLoading -> ContentState.Loading
+                screenState.errorResource != null -> ContentState.Error
+                screenState.images.isEmpty() -> ContentState.Empty
+                else -> ContentState.Content
+            }
+            AnimatedContent(
+                targetState = contentState,
+                transitionSpec = {
+                    fadeIn() togetherWith fadeOut()
+                },
+                label = "screenState"
+            ) { state ->
+                Box(modifier = Modifier.fillMaxSize()) {
+                    when (state) {
+                        ContentState.Loading -> ProgressInfo(reloadImages = reloadImages)
+                        ContentState.Empty -> EmptyState()
+                        ContentState.Content -> Images(screenState, navigateToImageDetail)
+                        ContentState.Error -> ErrorState(screenState, reloadImages)
+                    }
+                }
+            }
+        }
+    }
+}
+
+private enum class ContentState { Loading, Empty, Content, Error }
+
+@Composable
+private fun EmptyState() {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(Res.string.empty_images),
+            modifier = Modifier.padding(32.dp),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun BoxScope.ErrorState(
+    screenState: ImagesScreenState,
+    reloadImages: () -> Unit,
+) {
+    screenState.errorResource?.let { errorResource ->
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = stringResource(errorResource))
+            Button(onClick = reloadImages) {
+                Text(stringResource(Res.string.reload))
+            }
         }
     }
 }
 
 @Composable
+private fun BoxScope.ProgressInfo(reloadImages: () -> Unit) {
+    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+}
+
+@Composable
 private fun Images(
-    viewState: ImagesViewState,
+    screenState: ImagesScreenState,
     navigateToImageDetail: (FlickerImageVO) -> Unit,
 ) {
     LazyVerticalStaggeredGrid(
@@ -105,7 +169,7 @@ private fun Images(
         modifier = Modifier.padding(horizontal = 4.dp)
     ) {
         items(
-            items = viewState.images,
+            items = screenState.images,
             key = { it.imageUrl },
             contentType = { "image" }
         ) { item ->
@@ -123,34 +187,14 @@ private fun Images(
     }
 }
 
-@Composable
-private fun BoxScope.ProgressInfo(
-    viewState: ImagesViewState,
-    reloadImages: () -> Unit,
-) {
-    if (viewState.isLoading) {
-        CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-    }
-    viewState.errorResource?.let { errorResource ->
-        Column(
-            modifier = Modifier.align(Alignment.Center),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = stringResource(errorResource))
-            Button(onClick = reloadImages) {
-                Text(stringResource(Res.string.reload))
-            }
-        }
-    }
-}
 
 @Preview
 @Composable
 private fun ImagesScreenPreview() {
     MyFlickerApplicationTheme {
         ImageScreen(
-            viewState = ImagesScreenPreviewData.loadedViewState,
-            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("nature"),
+            screenState = ImagesScreenPreviews.loadedScreenState,
+            textInputComponent = ImagesScreenPreviews.createPreviewTextInputComponent("nature"),
             isSwitchChecked = false,
             onSwitchCheckedChange = {},
             reloadImages = {},
@@ -164,8 +208,8 @@ private fun ImagesScreenPreview() {
 private fun ImagesScreenDarkPreview() {
     MyFlickerApplicationTheme(darkTheme = true) {
         ImageScreen(
-            viewState = ImagesScreenPreviewData.loadedViewState,
-            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("nature"),
+            screenState = ImagesScreenPreviews.loadedScreenState,
+            textInputComponent = ImagesScreenPreviews.createPreviewTextInputComponent("nature"),
             isSwitchChecked = false,
             onSwitchCheckedChange = {},
             reloadImages = {},
@@ -179,8 +223,8 @@ private fun ImagesScreenDarkPreview() {
 private fun ImagesScreenLoadingPreview() {
     MyFlickerApplicationTheme {
         ImageScreen(
-            viewState = ImagesScreenPreviewData.loadingViewState,
-            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("loading"),
+            screenState = ImagesScreenPreviews.loadingScreenState,
+            textInputComponent = ImagesScreenPreviews.createPreviewTextInputComponent("loading"),
             isSwitchChecked = true,
             onSwitchCheckedChange = {},
             reloadImages = {},
@@ -194,8 +238,23 @@ private fun ImagesScreenLoadingPreview() {
 private fun ImagesScreenErrorPreview() {
     MyFlickerApplicationTheme {
         ImageScreen(
-            viewState = ImagesScreenPreviewData.errorViewState,
-            textInputComponent = ImagesScreenPreviewData.createPreviewTextInputComponent("error"),
+            screenState = ImagesScreenPreviews.errorScreenState,
+            textInputComponent = ImagesScreenPreviews.createPreviewTextInputComponent("error"),
+            isSwitchChecked = false,
+            onSwitchCheckedChange = {},
+            reloadImages = {},
+            navigateToImageDetail = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ImagesScreenEmptyPreview() {
+    MyFlickerApplicationTheme {
+        ImageScreen(
+            screenState = ImagesScreenPreviews.emptyScreenState,
+            textInputComponent = ImagesScreenPreviews.createPreviewTextInputComponent(""),
             isSwitchChecked = false,
             onSwitchCheckedChange = {},
             reloadImages = {},

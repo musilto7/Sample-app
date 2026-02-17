@@ -4,10 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import cz.musilto5.myflickerapp.generated.resources.Res
 import cz.musilto5.myflickerapp.generated.resources.error_network
 import cz.musilto5.myflickerapp.presentation.core.component.TextInputComponent
-import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesViewState
+import cz.musilto5.myflickerapp.presentation.feature.image.list.model.ImagesScreenState
 import cz.musilto5.myflickerapp.presentation.feature.image.model.FlickerImageVO
 
-object ImagesScreenPreviewData {
+object ImagesScreenPreviews {
 
     val sampleImages = listOf(
         FlickerImageVO(
@@ -32,25 +32,32 @@ object ImagesScreenPreviewData {
         )
     )
 
-    val loadedViewState = ImagesViewState(
+    val loadedScreenState = ImagesScreenState(
         tagsInput = "nature",
         images = sampleImages,
         isLoading = false,
         errorResource = null
     )
 
-    val loadingViewState = ImagesViewState(
+    val loadingScreenState = ImagesScreenState(
         tagsInput = "loading",
         images = emptyList(),
         isLoading = true,
         errorResource = null
     )
 
-    val errorViewState = ImagesViewState(
+    val errorScreenState = ImagesScreenState(
         tagsInput = "error",
         images = emptyList(),
         isLoading = false,
         errorResource = Res.string.error_network
+    )
+
+    val emptyScreenState = ImagesScreenState(
+        tagsInput = "",
+        images = emptyList(),
+        isLoading = false,
+        errorResource = null
     )
 
     fun createPreviewTextInputComponent(initialText: String): TextInputComponent {

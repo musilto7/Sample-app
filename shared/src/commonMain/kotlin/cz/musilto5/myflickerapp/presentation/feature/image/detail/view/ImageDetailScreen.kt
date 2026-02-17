@@ -20,7 +20,7 @@ import cz.musilto5.myflickerapp.generated.resources.Res
 import cz.musilto5.myflickerapp.generated.resources.close_button_content_description
 import cz.musilto5.myflickerapp.generated.resources.image_content_description
 import cz.musilto5.myflickerapp.generated.resources.image_detail_screen_title
-import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviewData
+import cz.musilto5.myflickerapp.presentation.feature.image.preview.ImagesScreenPreviews
 import cz.musilto5.myflickerapp.presentation.theme.MyFlickerApplicationTheme
 import org.jetbrains.compose.resources.stringResource
 
@@ -74,7 +74,7 @@ private fun ImageDetailTopAppBar(
 private fun ImageDetailScreenPreview() {
     MyFlickerApplicationTheme {
         ImageDetailScreen(
-            imageVO = ImagesScreenPreviewData.sampleImages[0],
+            imageVO = ImagesScreenPreviews.sampleImages[0],
             onBackPressed = {}
         )
     }
@@ -85,7 +85,7 @@ private fun ImageDetailScreenPreview() {
 private fun ImageDetailScreenDarkPreview() {
     MyFlickerApplicationTheme(darkTheme = true) {
         ImageDetailScreen(
-            imageVO = ImagesScreenPreviewData.sampleImages[0],
+            imageVO = ImagesScreenPreviews.sampleImages[0],
             onBackPressed = {}
         )
     }
@@ -96,7 +96,7 @@ private fun ImageDetailScreenDarkPreview() {
 private fun ImageDetailScreenNoTitlePreview() {
     MyFlickerApplicationTheme {
         ImageDetailScreen(
-            imageVO = ImagesScreenPreviewData.sampleImages[4],
+            imageVO = ImagesScreenPreviews.sampleImages[4],
             onBackPressed = {}
         )
     }

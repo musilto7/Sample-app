@@ -89,10 +89,6 @@ The `iosApp` folder includes scripts to build debug and release XCFrameworks.
   `./gradlew :shared:testDebugUnitTest`  
   (or the `shared` test configuration in Android Studio.)
 
-- **Android instrumented tests**:  
-  `./gradlew :shared:connectedDebugAndroidTest`  
-  (with an emulator or device connected.)
-
 ## Project highlights
 
 - **100% shared UI** – all screens (list, detail, navigation) are in `shared/src/commonMain`
